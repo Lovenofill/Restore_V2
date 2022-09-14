@@ -16,7 +16,7 @@ export default function AboutPage() {
   return (
     <Container>
       <ButtonGroup variant="contained" aria-label="outlined primary button group">
-        <Button onClick={()=>agent.TestError.get400Error().catch(error => console.log(error))}>Test 400 Errors</Button>
+        <Button onClick={()=>agent.TestError.get404Error().catch(error => console.log(error))}>Test 400 Errors</Button>
         <Button>Two</Button>
         <Button>Three</Button>
       </ButtonGroup>
