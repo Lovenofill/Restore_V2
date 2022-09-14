@@ -11,6 +11,7 @@ import HomePage from "../../features/home/HomePage";
 import NotFound from "../errors/NotFound";
 import Header from "./Header";
 import 'react-toastify/dist/ReactToastify.css';
+import ServerError from "../errors/ServerError";
 
 export default function App() {
   const [mode, setMode] = useState(true);
@@ -45,6 +46,7 @@ export default function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/catalog" element={<Catalog />} />
             <Route path="/catalog/:id" element={<ProductDetails />} />
+            <Route path="/server-error" element={<ServerError/>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>

@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
+import {useNavigate} from "react-router-dom"
+import { history } from "../..";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
 
@@ -15,17 +17,32 @@ axios.interceptors.response.use(
   (error: AxiosError) => {
     var data = error.response?.data; // obj ไม่รู้ชนิด
     var json = JSON.stringify(data);
-    var { title, status } = JSON.parse(json);
+    var result = JSON.parse(json);
 
-    switch (status) {
+    switch (result.status) {
       case 400:
-        toast(title);
+        //ตรวจสอบค่าที่ส่งมาจาก GetValidationError()
+        if (result.errors) {
+          const modelStateErrors: string[] = [];
+          for (const key in result.errors) {
+            if (result.errors[key]) {
+              modelStateErrors.push(result.errors[key]);
+            }
+          }
+          console.log(modelStateErrors);
+          throw modelStateErrors.flat();
+        }
+        toast.error(result.title);
         break;
       case 401:
-        toast(title);
+        toast.error(result.title);
         break;
       case 404:
-        toast(title);
+        toast.error(result.title);
+        break;
+      case 500:
+        history.push('/server-error',{state:data})
+        toast.error(result.title);
         break;
       default:
         break;
@@ -46,6 +63,8 @@ const TestError = {
   get400Error: () => requests.get("buggy/GetBadRequest"),
   get401Error: () => requests.get("buggy/GetUnAuthorized"),
   get404Error: () => requests.get("buggy/GetNotFound"),
+  get500Error: () => requests.get("buggy/GetServerError"),
+  getValidationError: () => requests.get("buggy/GetValidationError"),
 };
 
 const agent = {

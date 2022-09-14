@@ -8,11 +8,11 @@ namespace API.Middleware
     // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/?view=aspnetcore-6.0    
 
     public class ExceptionMiddleware
-{
+    {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
         private readonly IHostEnvironment _env;
-        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger, 
+        public ExceptionMiddleware(RequestDelegate next, ILogger<ExceptionMiddleware> logger,
             IHostEnvironment env)
         {
             _env = env;
@@ -22,7 +22,7 @@ namespace API.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            try 
+            try
             {
                 await _next(context);
             }
@@ -39,8 +39,12 @@ namespace API.Middleware
                     Title = ex.Message
                 };
 
-                var options = new JsonSerializerOptions{PropertyNamingPolicy = 
-                    JsonNamingPolicy.CamelCase};
+
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy =
+                    JsonNamingPolicy.CamelCase
+                };
 
                 var json = JsonSerializer.Serialize(response, options);
 
