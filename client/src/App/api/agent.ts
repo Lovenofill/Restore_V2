@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { history } from "../..";
 
 axios.defaults.baseURL = "http://localhost:5000/api/";
+axios.defaults.withCredentials = true; //อนุญำตให้เข้ำถึงคุกกี้ที่ browser ได
 
 const ResponseBody = (response: AxiosResponse) => response.data;
 
@@ -41,7 +42,7 @@ axios.interceptors.response.use(
         toast.error(result.title);
         break;
       case 500:
-        history.push('/server-error',{state:data})
+        history.push("/server-error", { state: data });
         toast.error(result.title);
         break;
       default:
@@ -52,6 +53,8 @@ axios.interceptors.response.use(
 
 const requests = {
   get: (url: string) => axios.get(url).then(ResponseBody),
+  post: (url: string, body?: {}) => axios.post(url, body).then(ResponseBody),
+  delete: (url: string) => axios.delete(url).then(ResponseBody),
 };
 // catalog.list() เรียกใช้ได้เลย
 const catalog = {
@@ -66,10 +69,15 @@ const TestError = {
   get500Error: () => requests.get("buggy/GetServerError"),
   getValidationError: () => requests.get("buggy/GetValidationError"),
 };
-
+const Basket = {
+  get: () => requests.get("Basket"),
+  addItem: (productId: number, quantity = 1) =>requests.post(`basket?productId=${productId}&quantity=${quantity}`),
+  removeItem: (productId: number, quantity = 1) =>requests.delete(`basket?productId=${productId}&quantity=${quantity}`),
+};
 const agent = {
   catalog,
   TestError,
+  Basket,
 };
 
 export default agent;
