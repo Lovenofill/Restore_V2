@@ -7,16 +7,23 @@ import { unstable_HistoryRouter as HistoryRouter } from "react-router-dom";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { StoreProvider } from "./App/context/StoreContext";
-
+import { Provider } from "react-redux";
+import { store } from "./App/store/configureStore";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { fetchProductsAsync } from "./features/catalog/catalogSlice";
 export const history = createBrowserHistory({ window });
+
+console.log(store.getState());
+store.dispatch(fetchProductsAsync());
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <HistoryRouter history={history}>
-    <StoreProvider>
-    <App />
-    </StoreProvider>
+    <Provider store={store}>
+      <App />
+    </Provider>
   </HistoryRouter>
 );
 

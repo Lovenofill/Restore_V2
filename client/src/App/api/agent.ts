@@ -8,7 +8,7 @@ axios.defaults.withCredentials = true; //อนุญำตให้เข้ำ
 
 const ResponseBody = (response: AxiosResponse) => response.data;
 
-const sleep = () => new Promise((resolve) => setTimeout(resolve, 500));
+const sleep = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
 axios.interceptors.response.use(
   async (response) => {

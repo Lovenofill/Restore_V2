@@ -4,10 +4,10 @@ import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Badge, List, ListItem, Switch } from "@mui/material";
+import { Badge, IconButton, List, ListItem, Switch } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link, NavLink } from "react-router-dom";
-import { useStoreContext } from "../context/StoreContext";
+import { useAppSelector } from "../store/configureStore";
 
 const midLinks = [
   { title: "catalog", path: "/catalog" },
@@ -33,11 +33,12 @@ const navStyles = {
 };
 
 export default function Header(props: any) {
-  const { basket } = useStoreContext();
+  //const { basket } = useStoreContext();
+  const { basket } = useAppSelector((state) => state.basket);
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <Box sx={{ flexGrow: 1, mb: 5 }}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar
           sx={{
@@ -53,9 +54,11 @@ export default function Header(props: any) {
               color="default"
             />
             <MenuIcon />
-            <Typography variant="h6" component="div">
-              AN515-51
-            </Typography>
+            <IconButton component={Link} to="/">
+              <Typography variant="h6" component="div">
+                AN515-51
+              </Typography>
+            </IconButton>
           </Box>
           <List sx={{ display: "flex" }}>
             {midLinks.map(({ title, path }) => (
@@ -71,7 +74,13 @@ export default function Header(props: any) {
             ))}
           </List>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Badge component={Link} to="/basket" color="secondary" badgeContent={itemCount} sx={{ mr: 1 }}>
+            <Badge
+              component={Link}
+              to="/basket"
+              color="secondary"
+              badgeContent={itemCount}
+              sx={{ mr: 1 }}
+            >
               <ShoppingCartIcon />
             </Badge>
 
